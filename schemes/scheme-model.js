@@ -3,7 +3,8 @@ const db = require("../data/dbConfig");
 module.exports = {
   find,
   findById,
-  findSteps
+  findSteps,
+  add
 };
 
 function find() {
@@ -17,11 +18,17 @@ function findById(id) {
 function findSteps(id) {
   return db
     .select(
-      "steps.id", "steps.instructions",
-      "schemes.scheme_name", "steps.step_number"
+      "steps.id",
+      "steps.instructions",
+      "schemes.scheme_name",
+      "steps.step_number"
     )
     .from("schemes")
     .where("steps.scheme_id", id)
     .innerJoin("steps", "steps.scheme_id", "schemes.id")
-    .orderBy('steps.step_number', "asc");
+    .orderBy("steps.step_number", "asc");
+}
+
+function add({ scheme_name }) {
+  return db("schemes").insert({ scheme_name });
 }
